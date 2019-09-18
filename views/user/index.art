@@ -1,9 +1,18 @@
 <!--layout.art-->
 <!doctype html>
 <html>
+
 <head>
 </head>
+
 <body>
-    {{ name }}
+    {{if login}} <h1>Hello, {{ username }}</h1>
+    
+    {{else}}
+    <h1>pls login</h1>
+    {{/if}}
+    <!-- {{if v1}} ... {{else if v2}} ... {{/if}} -->
+    
 </body>
+
 </html>
