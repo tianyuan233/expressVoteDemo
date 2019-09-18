@@ -1,0 +1,9 @@
+<!--layout.art-->
+<!doctype html>
+<html>
+<head>
+</head>
+<body>
+    {{ name }}
+</body>
+</html>
