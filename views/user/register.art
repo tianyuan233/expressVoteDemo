@@ -1,23 +1,31 @@
 <div class="main">
+  {{if err}}
+  <h1>{{ err }}</h1>
+  {{/if}}
+  {{if info}}
+  <h1>{{ info }}</h1>
+  {{/if}}
   <h4 class="title">
     <div class="normal-title">
-      <a class="active" href="/user/login">登录</a>
+      <a class="active" href="/login">登录</a>
       <b>·</b>
-      <a id="js-sign-up-btn" class="" href="/user/register">注册</a>
+      <a id="js-sign-up-btn" class="" href="/register">注册</a>
     </div>
   </h4>
   <div>
-    <form action="/user/login" accept-charset="UTF-8" method="post">
+    <form action="/register" accept-charset="UTF-8" method="post">
       <div>
-        <input placeholder="手机号或邮箱" type="text" name="username" autocomplete="off">
+        <input placeholder="用户名" type="text" name="username" autocomplete="off">
+      </div>
+      <div>
+        <input placeholder="邮箱" type="text" name="email" autocomplete="off">
       </div>
       <div>
         <input placeholder="密码" type="password" name="password" autocomplete="off">
       </div>
-      <div>
+      <!-- <div>
         <input placeholder="确认密码" type="password" name="password2" autocomplete="off">
-      </div>
-
+      </div> -->
       <button type="submit">注册</button>
     </form>
   </div>

@@ -11,9 +11,7 @@ router.route('/login')
 
 //注册
 router.route('/register')
-  .get(User.register)
-  .post(User.showRegister)
-
-
+  .get(User.showRegister)
+  .post(User.register)
 
 module.exports = router;

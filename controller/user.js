@@ -1,27 +1,11 @@
-const users = [{
-  username: 'a',
-  email: 'a@qq.com',
-  password: 'a'
-}, {
-  username: 'b',
-  email: 'b@qq.com',
-  password: 'b'
-}]
+const conn = require('../util/db')
 
 exports.showUserInfo = function (req, res, next) {
-  let login = false
   username = req.signedCookies.username
   console.log(username);
-  
-  // console.log('username-------',username);
-  if (username) {
-    login = true
-  }
+
   res.render('user/index.art',
-  {
-    'login':login,
-    'username':username
-  })
+    { 'username': username })
 }
 
 exports.showLogin = function (req, res, next) {
@@ -29,27 +13,43 @@ exports.showLogin = function (req, res, next) {
 }
 
 exports.Login = function (req, res, next) {
-  var tryLoginUser = req.body
-  if (users.findIndex(it => {
-    return it.name == tryLoginUser.name && it.password == tryLoginUser.password
-  }) >= 0) {
-    res.cookie('username', tryLoginUser.username, {
-      signed: true
-    })
-    res.redirect('/user')
-  } else {
-    res.end('用户名或密码错误')
-  }
+  let loginUser = req.body
+  console.log(loginUser);
 
-  res.render('user/login.art')
+  conn.query('SELECT * from `user` where `username` = ?', [loginUser.username], function (error, results, fields) {
+    if (error) throw error;
+    if (results.length === 0) {
+      res.render('user/login.art', { err: '无此用户' })
+    }
+    if (loginUser.username === results[0].username && loginUser.password === results[0].password) {
+      res.cookie('username', loginUser.username, {
+        signed: true
+      })
+      res.redirect('/')
+    } else {
+      res.render('user/login.art', { err: '用户名或密码错误' })
+    }
+  });
+  conn.end()
 }
 
-
 exports.showRegister = function (req, res, next) {
-
   res.render('user/register.art')
 }
 
 exports.register = function (req, res, next) {
-  res.render('user/register.art')
+  let regUser = req.body
+  conn.query('SELECT * from `user` where `username` = ?', [regUser.username], function (error, rows, fields) {
+    if (error) throw error;
+    if (rows.length > 0) {
+      res.render('user/register.art', { err: '用户名已被注册' })
+    } else {
+      conn.query('insert into `user`(username,email,password) values (?,?,?)', [regUser.username, regUser.email, regUser.password], function (error, results, fields) {
+        if (error) throw error;
+        res.render('user/register.art', { info: '注册成功' })
+      });
+      conn.end()
+    }
+  })
+  conn.end()
 }
