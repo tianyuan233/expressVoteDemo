@@ -1,15 +1,18 @@
-const mysql = require('mysql')
-const dbconfig = require('../conf/db')
-const conn = mysql.createConnection(dbconfig.mysql)
+const Sequelize = require('sequelize');
 
-conn.connect(function (err) {
-  if (err) {
-    console.error('error connecting: ' + err.stack);
-    return;
+const sequelize = new Sequelize(
+  'mysql://root:123456@localhost:3306/vote',
+  {
+    // logging: false,
+    pool: {
+      max: 5,
+      min: 0,
+      acquire: 30000,
+      idle: 10000
+    }
   }
-  console.log('connected as id ' + conn.threadId);
-});
+  );
+// 同步数据模型与数据表
+// sequelize.sync()
 
-
-
-module.exports = conn
+module.exports = sequelize

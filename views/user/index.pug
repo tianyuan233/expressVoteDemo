@@ -1,0 +1,10 @@
+extends ../base.pug
+
+block content
+    div 
+    if username
+      h2.user Welcome #{username}  
+    a(href="/vote/create") 创建投票
+    |
+    |
+    a(href="/logout") 登出

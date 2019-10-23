@@ -14,4 +14,8 @@ router.route('/register')
   .get(User.showRegister)
   .post(User.register)
 
+//退出
+router.route('/logout')
+  .get(User.Logout)
+
 module.exports = router;

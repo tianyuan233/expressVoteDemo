@@ -1,0 +1,23 @@
+extends ../base.pug
+
+block content
+  div 
+    if info
+      h2.info #{info}  
+  form(action="/login" method="post")
+    div
+      input(
+        type="text"
+        name="username"
+        placeholder="用户名"
+        )
+    div
+      input(
+        type="password"
+        name="password"
+        placeholder="密码"
+        )
+    button(type="submit") login
+    |
+    |
+    a(href="/register") register 
