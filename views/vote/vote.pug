@@ -1,11 +1,5 @@
 extends ../base.pug
 
-//- block style
-//-   style.
-//-     li {
-//-       list-style:none;
-//-     }
-
 block content
   h1 标题: #{vote.title}
   h2 描述: #{vote.desc}
@@ -18,7 +12,16 @@ block content
 
   if username
       h2.user #{info}  
+  
+  script(src="/socket.io/socket.io.js") 
   script.
+    let socket = io()
+    socket.on('voteup',data=>{
+      console.log(data)
+      //- window.location.reload();
+      main()
+    })
+
     let optionList = document.querySelector('#option-list')
     let voteId = optionList.dataset.voteid
 
@@ -32,24 +35,13 @@ block content
 
     async function main() {
       var voteResult = (await axios.get(`/vote/info/${optionList.dataset.voteid}`)).data
-
       if (voteResult == null) {
         voteResult = []
       }
-
-      //- var socket = io()
-
-      //- socket.on('new vote', data => {
-      //-   voteResult.push(data)
-      //-   updateState(voteResult)
-      //- })
-
+      console.log("初始: ",voteResult)
       updateState(voteResult)
     }
-
     main()
-
-
     optionList.addEventListener('click', async e => {
       let optionid = e.target.dataset.optionid
       let voteResult = (await axios.post(`/vote/${voteId}`, 
@@ -58,5 +50,6 @@ block content
           optionid: optionid,
         }
         )).data
+        console.log("after vote: ",voteResult)
         updateState(voteResult)
     })

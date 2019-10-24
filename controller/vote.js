@@ -55,34 +55,40 @@ exports.voteup = async function (req, res, next) {
   let voteid = req.body.voteid
   let optionid = req.body.optionid
 
+  
   let voteupInfo = await Choice.findAndCountAll({
     where: {
       userid: userid,
       voteid: voteid
     }
   })
-
+  
   if (voteupInfo.count === 0) {
     await Choice.create({
       userid: userid,
       voteid: voteid,
       optionid: optionid
     })
-
+    
+    
   } else {
     console.log("update");
-
     let updateRes = await Choice.update(
       { optionid: optionid },
       { where: { userid: userid, voteid: voteid, } }
-    )
-    console.log(updateRes);
-
-  }
-
-  let allVoteData = await Choice.findAll({
-    where: {
-      voteid: voteid
+      )
+      console.log(updateRes);
+      
+    }
+    io.in(`/vote/${voteid}`).emit('voteup', {
+      userid,
+      voteid,
+      optionid
+    })
+    
+    let allVoteData = await Choice.findAll({
+      where: {
+        voteid: voteid
     }
   })
   res.json(allVoteData)
@@ -92,7 +98,7 @@ exports.voteup = async function (req, res, next) {
 exports.showVoteInfoById = async function (req, res, next) {
   let userid = req.signedCookies.userid
   let voteid = req.params.id
-  
+
   let userVoteupInfo = await Choice.findOne({
     where: {
       userid: userid,
