@@ -18,6 +18,7 @@ block content
     let socket = io()
     socket.on('voteup',data=>{
       console.log(data)
+      main()
     })
     let optionList = document.querySelector('#option-list')
     let voteId = optionList.dataset.voteid
@@ -25,9 +26,7 @@ block content
 
 
     function updateState(voteResult) {
-      console.log('asdasd',options)
       var counted = _.countBy(voteResult, 'optionid')
-      console.log(counted)
       options.forEach(option => {
         if (option.id in counted) {
           document.querySelector(`[data-optionid="${option.id}"]`).lastChild.textContent = counted[option.id] +'票'
@@ -42,7 +41,6 @@ block content
       if (voteResult == null) {
         voteResult = []
       }
-      console.log("初始: ",voteResult)
       updateState(voteResult)
     }
     main()
@@ -54,6 +52,5 @@ block content
           optionid: optionid,
         }
         )).data
-        console.log("after vote: ",voteResult)
         updateState(voteResult)
     })
