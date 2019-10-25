@@ -77,8 +77,6 @@ exports.voteup = async function (req, res, next) {
       { optionid: optionid },
       { where: { userid: userid, voteid: voteid, } }
       )
-      console.log(updateRes);
-      
     }
     io.in(`/vote/${voteid}`).emit('voteup', {
       userid,
